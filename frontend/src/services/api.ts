@@ -164,6 +164,10 @@ export const apiService = {
     },
   },
 
+  // Calendar
+  calendar: {
+    getMonth: async (year: number, month: number) => {
+      const response = await api.get(`/calendar/month?year=${year}&month=${month}`);
   // Chat
   chat: {
     getConversations: async () => {

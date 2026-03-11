@@ -402,12 +402,8 @@ app.use('/api/leave', require('./routes/leave'));
 app.use('/api/broadcast', require('./routes/broadcast'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/calendar', require('./routes/calendar'));
-<<<<<<< HEAD
 app.use('/api/attendance', require('./routes/attendance'));
-=======
 app.use('/api/chat', require('./routes/chat'));
->>>>>>> c1fb7e7a1330b34e1fad9ba881df8708a8ee5455
-
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });

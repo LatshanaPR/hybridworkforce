@@ -105,12 +105,20 @@ const Attendance: React.FC = () => {
     attendance.forEach(record => {
       const dateStr = new Date(record.date).toISOString().split('T')[0];
       if (dateMap.has(dateStr)) {
+        // Calculate hours: if checkOutTime is null, use current time
+        let totalHours = record.totalHours;
+        if (record.checkInTime && !record.checkOutTime) {
+          const checkIn = new Date(record.checkInTime);
+          const now = new Date();
+          totalHours = parseFloat(((now.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(2));
+        }
+        
         dateMap.set(dateStr, {
           date: dateStr,
           checkInTime: record.checkInTime,
           checkOutTime: record.checkOutTime,
-          totalHours: record.totalHours,
-          displayStatus: record.checkInTime && record.checkOutTime ? 'PRESENT' : 'ABSENT'
+          totalHours: totalHours,
+          displayStatus: record.checkInTime ? 'PRESENT' : 'ABSENT'
         });
       }
     });
@@ -219,14 +227,7 @@ const Attendance: React.FC = () => {
         description: `Total hours worked: ${response.session.totalHours}h`,
       });
       
-      // Remove token and redirect to login
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      
-      // Small delay to show toast
-      setTimeout(() => {
-        navigate('/login');
-      }, 1000);
+      setIsLoading(false);
     } catch (error: any) {
       toast({
         title: 'Check-out Failed',
@@ -424,7 +425,7 @@ const Attendance: React.FC = () => {
               variant={isLoggedIn ? "outline" : "success"}
               className="flex-1"
               onClick={handleCheckIn}
-              disabled={isLoading}
+              disabled={isLoading || isLoggedIn}
             >
               <LogIn className="w-4 h-4 mr-2" />
               Login
@@ -433,7 +434,7 @@ const Attendance: React.FC = () => {
               variant={isLoggedIn ? "danger" : "outline"}
               className="flex-1"
               onClick={handleCheckOut}
-              disabled={isLoading}
+              disabled={isLoading || !isLoggedIn}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout

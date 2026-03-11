@@ -163,11 +163,13 @@ export const apiService = {
       return response.data;
     },
   },
-
-  // Calendar
-  calendar: {
-    getMonth: async (year: number, month: number) => {
-      const response = await api.get(`/calendar/month?year=${year}&month=${month}`);
+// Calendar
+calendar: {
+  getMonth: async (year: number, month: number) => {
+    const response = await api.get(`/calendar/month?year=${year}&month=${month}`);
+    return response.data;
+  },
+},
   // Chat
   chat: {
     getConversations: async () => {
@@ -307,4 +309,3 @@ export const apiService = {
 };
 
 export default api;
-
